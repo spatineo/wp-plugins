@@ -602,6 +602,9 @@ function toggleVisOff(boxid)
 									$option_label = $roption;
 								}
 
+								//Localization
+								$option_label = apply_filters('the_title', $option_label);
+
 								$option_label = trim(stripslashes($option_label));
 								$option_label = str_replace("<", "&lt;", $option_label);
 								$option_label = str_replace(">", "&gt;", $option_label);
@@ -825,7 +828,7 @@ function toggleVisOff(boxid)
 					"onclick=" . '"   fb_toggleLayer(\'formbuilder-' . $form_id . '-page-' . $page_id . '\');  ' .
 					'  fb_toggleLayer(\'formbuilder-' . $form_id . '-page-' . ($page_id - 1) . '\');  "' .	" />";
 
-				$formDisplay .= "\n<div class='formBuilderSubmit form-actions'>$previous_page_insert<input type='submit' name='Submit' value='" . apply_filters('the_title',$formBuilderTextStrings['send']) . "' /></div>";
+				$formDisplay .= "\n<div class='formBuilderSubmit form-actions'>$previous_page_insert<input type='submit' name='Submit' value='" . apply_filters('the_title',html_entity_decode($formBuilderTextStrings['send'])) . "' /></div>";
 			}
 			else
 				$formDisplay .= "";
@@ -979,9 +982,9 @@ function toggleVisOff(boxid)
 					if(!$msg)
 					{
 						if(!$form['thankyoutext']) $form['thankyoutext'] = "<h4>"
-							. $formBuilderTextStrings['success']
+							. apply_filters('the_title',$formBuilderTextStrings['success'])
 							. "</h4><p>"
-							. $formBuilderTextStrings['send_success']
+							. apply_filters('the_title',$formBuilderTextStrings['send_success'])
 							. "</p>";
 
 						// Populate ~variable~ tags in the autoresponse with values submitted by the user.

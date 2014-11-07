@@ -26,7 +26,7 @@ along with this program; if not, write to the Free Software
 Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA  02111-1307  USA
 
 */
-	
+
 	define("FORMBUILDER_VERSION_NUM", "1.01");
 
 	// Define FormBuilder Related Tables
@@ -37,20 +37,20 @@ Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA  02111-1307  USA
 	define("FORMBUILDER_TABLE_RESPONSES", $table_prefix . "formbuilder_responses");
 	define("FORMBUILDER_TABLE_RESULTS", $table_prefix . "formbuilder_results");
 	define("FORMBUILDER_TABLE_TAGS", $table_prefix . "formbuilder_tags");
-	
-	
+
+
 	/*
 	 Place the following in the wp-config.php file to force FB to remain
 	 active.  You should only need to do this if you have added FB
 	 to the template manually.
-	 
+
 	if(!defined("FORMBUILDER_IN_TEMPLATE"))
 		define("FORMBUILDER_IN_TEMPLATE", true);
-	 
+
 	 */
 	if(!defined("FORMBUILDER_IN_TEMPLATE"))
 		define("FORMBUILDER_IN_TEMPLATE", false);
-	
+
 	/*
 	 * Define this as 'true' in the wp-config.php file if you want formbuilder
 	 * to hide the post body after a successful submission of the form.
@@ -59,16 +59,16 @@ Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA  02111-1307  USA
 	if(!defined('FORMBUILDER_HIDE_POST_AFTER'))
 		define('FORMBUILDER_HIDE_POST_AFTER', false);
 
-	// Check to see if we have an accurate Request URI.  
+	// Check to see if we have an accurate Request URI.
 	// Can help with certain apache configurations.
-	if( isset($GLOBALS['HTTP_SERVER_VARS']['REQUEST_URI']) 
+	if( isset($GLOBALS['HTTP_SERVER_VARS']['REQUEST_URI'])
 	AND $_SERVER['REQUEST_URI'] != $GLOBALS['HTTP_SERVER_VARS']['REQUEST_URI'])
 	{
 		$_SERVER['REQUEST_URI'] = $GLOBALS['HTTP_SERVER_VARS']['REQUEST_URI'];
 	}
 
 	// IIS compatibility
-	if(!isset($_SERVER['REQUEST_URI'])) 
+	if(!isset($_SERVER['REQUEST_URI']))
 	{
 		if(isset($_SERVER['PHP_SELF']))
 			$_SERVER['REQUEST_URI'] = $_SERVER['PHP_SELF'];
@@ -80,7 +80,7 @@ Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA  02111-1307  USA
 		if($_SERVER['QUERY_STRING'])
 			$_SERVER['REQUEST_URI'] .=  '?'.$_SERVER['QUERY_STRING'];
 	}
-		
+
 	//Dawnings' Fix to correct ABSPATH for Windows Machines
 	$ColonSlash = substr(ABSPATH, 1, 2);	//If Windows, this may be from "C:\" or another letter
 	$SlashSlash = substr(ABSPATH, 0, 2);	//If Windows, this could be "\\" for a network path
@@ -101,16 +101,16 @@ Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA  02111-1307  USA
 		$new_abs = ABSPATH;
 		$IS_WINDOWS = false;	//Handy for some other places
 	}
-	
+
 	if(substr($new_abs, -1, 1) != '/') $new_abs = $new_abs . '/';
 	define ( "ABSOLUTE_PATH", $new_abs );
 
 	// Define FormBuilder Paths and Directories
 	define("FORMBUILDER_FILENAME", basename(__FILE__));
-	
+
 	define("FORMBUILDER_PLUGIN_KEY", basename(dirname(__FILE__)) . '/' . basename(__FILE__));
-	
-	
+
+
 
 	if ($IS_WINDOWS) {
 		$temp = str_replace(FORMBUILDER_FILENAME, "", __FILE__);
@@ -119,9 +119,9 @@ Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA  02111-1307  USA
 	} else {
 		define("FORMBUILDER_PLUGIN_PATH", str_replace(FORMBUILDER_FILENAME, "", __FILE__));
 	}
-	
-	
-	
+
+
+
 	// Pre-2.6 compatibility
 	if ( ! defined( 'WP_CONTENT_URL' ) )
 	      define( 'WP_CONTENT_URL', get_option( 'siteurl' ) . '/wp-content' );
@@ -133,23 +133,23 @@ Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA  02111-1307  USA
 	      define( 'WP_PLUGIN_DIR', WP_CONTENT_DIR . '/plugins' );
 
 	// Determine whether we're in HTTPS mode or not, and change URL's accordingly.
-	if(isset($_SERVER['HTTPS']) AND $_SERVER['HTTPS'] == 'on') 
+	if(isset($_SERVER['HTTPS']) AND $_SERVER['HTTPS'] == 'on')
 	{
 		define('FORMBUILDER_SITE_URL', str_replace('http://', 'https://', get_bloginfo('url')));
 		define('FORMBUILDER_BLOG_URL', str_replace('http://', 'https://', get_bloginfo('wpurl')));
 	}
-	else 
+	else
 	{
 		define('FORMBUILDER_SITE_URL', get_bloginfo('url'));
 		define('FORMBUILDER_BLOG_URL', get_bloginfo('wpurl'));
 	}
 	define("FORMBUILDER_PLUGIN_URL", plugins_url() . '/' . rawurlencode(basename(dirname(__FILE__))) . '/');
-  
+
 	// Define Regular Expressions used throughout.
 	define("FORMBUILDER_CONTENT_TAG", '\[ *formbuilder *\: *([0-9]+) *\]');
 	define("FORMBUILDER_PATTERN_EMAIL", '^[A-Za-z0-9\._-]+@[A-Za-z0-9\._-]+\.[a-zA-Z]+$');
 	define("FORMBUILDER_PATTERN_PHONE", '^[0-9 \(\)\-]+$');
-	
+
 	// Require all necessary files.
 	require_once(FORMBUILDER_PLUGIN_PATH . "requiredFiles.php");
 
@@ -172,7 +172,7 @@ Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA  02111-1307  USA
 		// Additional Filters and Actions
 		add_filter('admin_head', 'formbuilder_admin_head');
 		add_action('activate_formbuilder/formbuilder.php', 'formbuilder_activation');
-		
+
 		if(!session_start())
 			die("FormBuilder admin can't start session.");
 
@@ -185,7 +185,7 @@ Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA  02111-1307  USA
 		// Include additional function for admin system.
 		include_once(FORMBUILDER_PLUGIN_PATH . "php/formbuilder_admin_functions.php");
 		include_once(FORMBUILDER_PLUGIN_PATH . "php/formbuilder_admin_pages.inc.php");
-		
+
 		// Display the admin related CSS
 		formbuilder_admin_css();
 	}
@@ -200,7 +200,7 @@ Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA  02111-1307  USA
 		}
 	}
 	add_action( 'after_plugin_row', 'formbuilder_plugin_notice' );
-	
+
 	function formbuilder_plugin_links( $links, $file ) {
 		if( $file == FORMBUILDER_PLUGIN_KEY && function_exists( "admin_url" ) ) {
 			$manage_link = '<a href="' . admin_url( 'tools.php?page=formbuilder.php' ) . '">' . __('Manage') . '</a>';
@@ -209,7 +209,7 @@ Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA  02111-1307  USA
 		return $links;
 	}
 	add_filter( 'plugin_action_links', 'formbuilder_plugin_links', 10, 2 );
-	
+
 
 
 
@@ -222,29 +222,29 @@ Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA  02111-1307  USA
 		$plugin_dir = basename(dirname(__FILE__));
 		$lang_dir = $plugin_dir . '/lang';
 		load_plugin_textdomain( 'formbuilder', 'wp-content/plugins/' . $lang_dir, $lang_dir );
-		
+
 		if(fb_is_active())
 		{
 			add_filter('the_content', 'formbuilder_main');
 			add_filter('the_content_rss', 'formbuilder_strip_content');
 			add_filter('the_excerpt', 'formbuilder_strip_content');
 			add_filter('the_excerpt_rss', 'formbuilder_strip_content');
-		
+
 			add_filter('wp_head', 'formbuilder_css');
-	
+
 			if(function_exists('wp_enqueue_script') AND $wp_version >= '2.6')
 			{
-				wp_enqueue_script( 
-					'jx_compressed.js', 
-					FORMBUILDER_PLUGIN_URL . 'js/jx_compressed.js', 
-					array(), 
+				wp_enqueue_script(
+					'jx_compressed.js',
+					FORMBUILDER_PLUGIN_URL . 'js/jx_compressed.js',
+					array(),
 					FORMBUILDER_VERSION_NUM
 				);
-				
-				wp_enqueue_script( 
-					'formbuilder_js', 
-					FORMBUILDER_PLUGIN_URL . 'js/compat-javascript.js', 
-					array(), 
+
+				wp_enqueue_script(
+					'formbuilder_js',
+					FORMBUILDER_PLUGIN_URL . 'js/compat-javascript.js',
+					array(),
 					FORMBUILDER_VERSION_NUM
 				);
 			}
@@ -252,15 +252,15 @@ Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA  02111-1307  USA
 			{
 				$fb_do_js_manually = true;
 			}
-	
+
 			if(session_id() == '') session_start();
-			
+
 			// Check to see if we have POST data to process.
 			formbuilder_checkPOSTData();
 		}
 
 	}
-	
+
 	/**
 	 * Function to determine whether FB should run or not.
 	 * @return unknown_type
@@ -269,55 +269,55 @@ Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA  02111-1307  USA
 	{
 		global $wp_query, $wpdb, $FB_ACTIVE;
 		if($FB_ACTIVE == true) return(true);
-		
+
 		// Allows placing of a constant variable in the wp-config.php file
 		// named FORMBUILDER_IN_TEMPLATE in order to force FB to remain active.
-		if(defined("FORMBUILDER_IN_TEMPLATE") 
+		if(defined("FORMBUILDER_IN_TEMPLATE")
 		AND FORMBUILDER_IN_TEMPLATE == true) return(true);
-		
+
 		// Detect whether or not there are forms to be displayed on the page.
 		$FB_ACTIVE = false;
 		$results = $wpdb->get_results("SELECT * FROM " . FORMBUILDER_TABLE_PAGES, ARRAY_A);
-		if($results) 
+		if($results)
 		{
 			foreach($results as $formPage)
 			{
 				$formPages[$formPage['post_id']] = $formPage['form_id'];
 			}
 		}
-		
+
 		foreach($wp_query->posts as $p)
 		{
-			if(isset($formPages[$p->ID]) 
+			if(isset($formPages[$p->ID])
 			OR formbuilder_check_content($p->post_content)) {
 				$FB_ACTIVE = true;
 				return(true);
 			}
 		}
-		
+
 		return(false);
 	}
-	
+
 	/**
 	 * Determine if the current post has an attached form.
 	 * @return int id of the form or false on no form.
-	 * 
+	 *
 	 */
 	function formbuilder_page_has_form()
 	{
 		global $post, $wpdb;
-		
+
 		$post_id = $post->ID;
-		$sql = "SELECT * FROM " . FORMBUILDER_TABLE_PAGES . " " 
+		$sql = "SELECT * FROM " . FORMBUILDER_TABLE_PAGES . " "
 			 . "LEFT JOIN " . FORMBUILDER_TABLE_FORMS . " ON " . FORMBUILDER_TABLE_PAGES . ".form_id = " . FORMBUILDER_TABLE_FORMS . ".id "
 			 . "WHERE post_id = '$post_id';";
-			 
+
 		$results = $wpdb->get_results($sql, ARRAY_A);
 		if($results) return($results[0]);
-		
+
 		$form_ids = formbuilder_check_content($post->post_content);
 		if(count($form_ids) > 0) return($form_id[0]);
-		
+
 		return false;
 	}
 
@@ -387,9 +387,9 @@ Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA  02111-1307  USA
 		</style>
 		<!-- END FORMBUILDER CSS CUSTOMIZATION -->
 	<?php
-	
+
 		// Determine if we need to load the javascript components manually or not.
-	
+
 		global $fb_do_js_manually;
 		if($fb_do_js_manually)
 		{
@@ -399,7 +399,7 @@ Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA  02111-1307  USA
 			<?php
 		}
 
-	
+
 	}
 
 	// This function should take any string of text and convert it to a readable variable name.
@@ -425,12 +425,15 @@ Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA  02111-1307  USA
 			}
 			else
 			{
+				//Filter for localizations first:
+				$slash_array[$key] = apply_filters('the_title',$value);
+				
 				$slash_array[$key] = htmlentities($value, ENT_QUOTES, get_option('blog_charset'));
 			}
 		}
 		return($slash_array);
 	}
-	
+
 
 
 	// Function to return a list of form ID's located inside the content.  Also returns the tag related to each, in order that they can be replaced with the actual form content.
@@ -466,73 +469,73 @@ Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA  02111-1307  USA
 		}
 		return($return);
 	}
-	
+
 	function formbuilder_on_greylist($content)
 	{
 		$mod_keys = trim(get_option('moderation_keys'));
 		if ( !empty($mod_keys) ) {
 			$words = explode("\n", $mod_keys );
-	
+
 			foreach ( (array) $words as $word) {
 				$word = trim($word);
-	
+
 				// Skip empty lines
 				if ( empty($word) )
 					continue;
-	
+
 				// Do some escaping magic so that '#' chars in the
 				// spam words don't break things:
 				$word = preg_quote($word, '#');
-	
+
 				$pattern = "#$word#i";
 				if ( preg_match($pattern, $content) ) return true;
 			}
 		}
 		return(false);
 	}
-	
+
 	function formbuilder_on_blacklist($content)
 	{
 		$mod_keys = trim( get_option('blacklist_keys') );
 		if ( '' == $mod_keys )
 			return false; // If moderation keys are empty
 		$words = explode("\n", $mod_keys );
-	
+
 		foreach ( (array) $words as $word ) {
 			$word = trim($word);
-	
+
 			// Skip empty lines
 			if ( empty($word) ) { continue; }
-	
+
 			// Do some escaping magic so that '#' chars in the
 			// spam words don't break things:
 			$word = preg_quote($word, '#');
-	
+
 			$pattern = "#$word#i";
 			if ( preg_match($pattern, $content) ) return true;
 		}
 		return false;
 	}
-	
+
 	function formbuilder_excessive_links($content)
 	{
 		$maxLinks = get_option('comment_max_links');
-		
+
 		if ( $maxLinks )
 		{
 			$links_found = preg_match_all("/<a[^>]*href[^=]*=/i", $content, $out);
-			
+
 			if($links_found > $maxLinks)
 				return true;
 		}
 		return(false);
 	}
-	
+
 	function formbuilder_check_spammer_ip($ip)
 	{
 		$url = "http://www.stopforumspam.com/api?ip=" . $ip;
 		$response = wp_remote_request($url);
-		
+
 		if(is_array($response))
 		{
 			$xml = $response['body'];
@@ -543,13 +546,13 @@ Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA  02111-1307  USA
 			return(0);
 		}
 	}
-	
+
 	function formbuilder_check_akismet($allFields = array())
 	{
 		// Code largely taken from Akismet WordPress plugin.
 		global $wpdb, $akismet_api_host, $akismet_api_port, $wpcom_api_key;
 		if(!function_exists('akismet_http_post') OR !$wpcom_api_key) return(false);
-		
+
 		$c = array();
 
 		$ignore = array( 'HTTP_COOKIE' );
@@ -565,7 +568,7 @@ Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA  02111-1307  USA
 		$c['blog']       = get_option('home');
 		$c['blog_lang']  = get_locale();
 		$c['blog_charset'] = get_option('blog_charset');
-		
+
 		$c['comment_content'] = '';
 		foreach($allFields as $key=>$field)
 		{
@@ -573,34 +576,34 @@ Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA  02111-1307  USA
 			{
 				$c['comment_author'] = $field['value'];
 			}
-			
+
 			if(!$c['comment_author_email'] AND (strtolower($field['field_name']) == 'email' OR $field['required_data'] == "email address"))
 			{
 				$c['comment_author_email'] = $field['value'];
 			}
-			
-			if($field['field_type'] == 'small text area' 
+
+			if($field['field_type'] == 'small text area'
 			OR $field['field_type'] == 'large text area')
 			{
 				$c['comment_content'] .= $field['value'] . "\n";
 			}
 		}
 		$c['comment_content'] = trim($c['comment_content']);
-		
+
 		if(!$c['comment_author'] OR !$c['comment_author_email'] OR !$c['comment_content']) return(false);
-		
+
 #		echo "<pre>Query Vars: "; print_r($c); echo "<br/></pre>";
 		$query_string = '';
 		foreach ( $c as $key => $data )
 		$query_string .= $key . '=' . urlencode( stripslashes($data) ) . '&';
-		
+
 #		echo "<pre>Query: $query_string<br/>\n</pre>";
-	
+
 		$response = akismet_http_post($query_string, $akismet_api_host, '/1.1/comment-check', $akismet_api_port);
 #		echo "<pre>Response: "; print_r($response); echo "<br/></pre>";
 		return $response[1];
 	}
-	
+
 	/**
 	 * Function to load many of the text strings used in FB
 	 * @return unknown_type
@@ -632,43 +635,43 @@ Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA  02111-1307  USA
 			$formBuilderTextStrings['mail_error_default'] = __("Mail server error.  Unable to send email.  Try switching FormBuilder to use Alternate Email Handling on the main configuration page.", 'formbuilder');
 			$formBuilderTextStrings['mail_error_alternate'] = __("Mail server error.  Unable to send email using the built-in WordPress mail controls.  ", 'formbuilder');
 		}
-		
+
 		return($formBuilderTextStrings);
 	}
-	
+
 	function formbuilder_user_can($capability)
 	{
 		$fb_permissions = get_option('formbuilder_permissions');
 		$_GET += array('fbaction' => NULL);
-		if(!$fb_permissions AND $_GET['fbaction'] != 'uninstall') 
+		if(!$fb_permissions AND $_GET['fbaction'] != 'uninstall')
 		{
 			$fb_permissions['level_10'] = array(
 				'connect' => 'yes',
 				'create' => 'yes',
 				'manage' => 'yes'
 			);
-			
+
 			$fb_permissions['level_7'] = array(
 				'connect' => 'yes',
 				'create' => 'yes',
 				'manage' => 'no'
 			);
-			
+
 			$fb_permissions['level_2'] = array(
 				'connect' => 'yes',
 				'create' => 'no',
 				'manage' => 'no'
 			);
-			
+
 			$fb_permissions['level_0'] = array(
 				'connect' => 'no',
 				'create' => 'no',
 				'manage' => 'no'
 			);
-			
+
 			update_option('formbuilder_permissions', $fb_permissions);
 		}
-	
+
 		if(current_user_can('create_users'))
 			$level = 'level_10';
 		elseif(current_user_can('publish_pages'))
@@ -677,7 +680,7 @@ Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA  02111-1307  USA
 			$level = 'level_2';
 		else
 			$level = 'level_0';
-		
+
 		if(isset($fb_permissions[$level][$capability]) && $fb_permissions[$level][$capability] == 'yes')
 			return(true);
 		else
@@ -686,67 +689,67 @@ Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA  02111-1307  USA
 
 	/**
 	 * Get a paginated navigation bar
-	 * 
+	 *
 	 * This function will create and return the HTML for a paginated navigation bar
-	 * based on the total number of results passed in $num_results, and the value 
+	 * based on the total number of results passed in $num_results, and the value
 	 * found in $_GET['pageNumber'].  The programmer simply needs to call this function
 	 * with the appropriate value in $num_results, and use the value in $_GET['pageNumber']
 	 * to determine which results should be shown.
 	 * Creates a list of pages in the form of:
 	 * 1 .. 5 6 7 .. 50 51 .. 100
 	 * (in this case, you would be viewing page 6)
-	 * 
+	 *
 	 * @global   int     $_GET['pageNumber'] is the current page of results being displayed.
 	 * @param    int     $num_results is the total number of results to be paged through.
 	 * @param    int     $num_per_page is the number of results to be shown per page.
 	 * @param    bool    $show set to true to write output to browser.
-	 * 
-	 * @return   string  Returns the HTML code to display the nav bar. 
-	 * 
+	 *
+	 * @return   string  Returns the HTML code to display the nav bar.
+	 *
 	 */
 	function fb_get_paged_nav($num_results, $num_per_page=10, $show=false)
 	{
 	    // Set this value to true if you want all pages to be shown,
 	    // otherwise the page list will be shortened.
-	    $full_page_list = false; 
-	        
+	    $full_page_list = false;
+
 	    // Get the original URL from the server.
 	    $url = $_SERVER['REQUEST_URI'];
-	    
+
 	    // Initialize the output string.
 	    $output = '';
-	    
+
 	    // Remove query vars from the original URL.
 	    if(preg_match('#^([^\?]+)(.*)$#isu', $url, $regs))
 	        $url = $regs[1];
-	    
+
 	    // Shorten the get variable.
 	    $q = $_GET;
-	    
+
 	    // Determine which page we're on, or set to the first page.
 	    if(isset($q['pageNumber']) AND is_numeric($q['pageNumber'])) $page = $q['pageNumber'];
 	    else $page = 1;
-	    
+
 	    // Determine the total number of pages to be shown.
 	    $total_pages = ceil($num_results / $num_per_page);
-	    
+
 	    // Begin to loop through the pages creating the HTML code.
 	    for($i=1; $i<=$total_pages; $i++)
 	    {
 	        // Assign a new page number value to the pageNumber query variable.
 	        $q['pageNumber'] = $i;
-	        
+
 	        // Initialize a new array for storage of the query variables.
 	        $tmp = array();
 	        foreach($q as $key=>$value)
 	            $tmp[] = "$key=$value";
-	        
+
 	        // Create a new query string for the URL of the page to look at.
 	        $qvars = implode("&amp;", $tmp);
-	        
+
 	        // Create the new URL for this page.
 	        $new_url = $url . '?' . $qvars;
-	        
+
 	        // Determine whether or not we're looking at this page.
 	        if($i != $page)
 	        {
@@ -772,81 +775,81 @@ Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA  02111-1307  USA
 	            $output .= "<strong>$i</strong> ";
 	        }
 	    }
-	    
+
 	    // Remove extra dots from the list of pages, allowing it to be shortened.
 	    $output = ereg_replace('(\. ){2,}', ' .. ', $output);
-	    
+
 	    // Determine whether to show the HTML, or just return it.
 	    if($show) echo $output;
-	    
+
 	    return($output);
 	}
-	
+
 		/**
 	 * Build a url based on permitted query vars passed to the function.
-	 * 
+	 *
 	 * @param $add array containing query vars to add to the query request.
 	 * @param $qvars array containing query vars to keep from the old query request.
-	 * 
+	 *
 	 * @return string containing the new URL
 	 */
 	function formbuilder_build_url($add = array(), $qvars = array())
 	{
 		// Get the original URL from the server.
 		$url = $_SERVER['REQUEST_URI'];
-		
+
 		// Remove query vars from the original URL.
 		if(preg_match('#^([^\?]+)(.*)$#isu', $url, $regs))
 		$url = $regs[1];
-		
+
 		// Shorten the get variable.
 		$q = $_GET;
-		
+
 		// Initialize a new array for storage of the query variables.
 		$tmp = array();
 		foreach($qvars as $key)
 			@$tmp[] = "$key=" . urlencode($q[$key]);
-		
+
 		foreach($add as $key=>$value)
 			@$tmp[] = "$key=" . urlencode($value);
-		
+
 		// Create a new query string for the URL of the page to look at.
 		$qvars = implode("&", $tmp);
-		
+
 		// Create the new URL for this page.
 		$new_url = $url . '?' . $qvars;
-		
+
 		return($new_url);
 	}
-	
+
 	/**
 	 * Get a list of all forms on this page.
 	 */
 	function formbuilder_get_all_forms()
 	{
 		global $wp_query, $wpdb;
-		
+
 		$formIDs = array();
-		
+
 		if(isset($wp_query))
 		{
-		
+
 			echo "TESTING FOR FORMS..";
 			foreach($wp_query->posts as $post)
 			{
 				$content = $post->post_content;
 				$content_form_ids = formbuilder_check_content($content);
-			
+
 				foreach($content_form_ids as $form_id)
 				{
 					$formIDs[] = $form_id['id'];
 				}
-				
+
 				$post_id = $post->ID;
-				
+
 				$sql = "SELECT form_id FROM " . FORMBUILDER_TABLE_PAGES . " WHERE post_id = '$post_id';";
 				$results = $wpdb->get_results($sql, ARRAY_A);
-				
+
 				if($results)
 				{
 					$page = $results[0];
@@ -854,9 +857,9 @@ Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA  02111-1307  USA
 				}
 			}
 		}
-		
+
 		var_dump($formIDs);
-		
+
 		if(count($formIDs) > 0)
 		{
 			$insert = implode(',', $formIDs);
@@ -869,18 +872,18 @@ Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA  02111-1307  USA
 			return(array());
 		}
 	}
-	
+
 	/**
 	 * Admin bar link.  Code from:
 	 * http://www.problogdesign.com/wordpress/add-useful-links-to-wordpress-admin-bar/
 	 */
-	
+
 	/**
 	 * Adds links to the bar.
 	 */
 	function formbuilder_admin_bar_links() {
 		global $wp_admin_bar, $formbuilder_formDisplayArray, $wpdb;
-		
+
 		// Only show if there is a form attached to the page.
 		$formIDs = array();
 		if(isset($formbuilder_formDisplayArray) AND is_array($formbuilder_formDisplayArray))
@@ -890,7 +893,7 @@ Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA  02111-1307  USA
 				$formIDs[] = $formID;
 			}
 		}
-		
+
 		if(count($formIDs) > 0)
 		{
 			$insert = implode(',', $formIDs);
@@ -905,7 +908,7 @@ Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA  02111-1307  USA
 					'id' => 'formbuilder_forms'
 				));
 			}
-			
+
 			foreach($formIDs as $id)
 			{
 				foreach($forms as $form)
@@ -921,10 +924,10 @@ Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA  02111-1307  USA
 				}
 			}
 		}
-		
-	}	
 
-	
+	}
+
+
 	/**
 	 * Checks if we should add links to the bar.
 	 */
@@ -932,11 +935,7 @@ Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA  02111-1307  USA
 		// Is the user sufficiently leveled, or has the bar been disabled?
 		if (!is_super_admin() || !is_admin_bar_showing() )
 			return;
-	 
+
 		// Good to go, lets do this!
 		add_action('admin_bar_menu', 'formbuilder_admin_bar_links', 35);
 	}
-	
-	
-	
-	
