@@ -175,11 +175,11 @@ class FBField extends FBObject {
 			$t = new FBTemplatizer($fieldTemplate);
 		}
 
-		$t->set('ERROR', apply_filters('the_title', $this->getError()));
+		$t->set('ERROR', $this->getError());
 		$t->set('NAME', $this->getName());
-		$t->set('LABEL', apply_filters('the_title', $this->getLabel()));
+		$t->set('LABEL', $this->getLabel());
 		$t->set('TYPE', str_replace(" ", "", $this->getType()));
-		$t->set('HELPTEXT', apply_filters('the_title', $this->getHelp()));
+		$t->set('HELPTEXT', $this->getHelp());
 		$t->set('VALUE', $this->getValue());
 
 		$html = $t->parse();
