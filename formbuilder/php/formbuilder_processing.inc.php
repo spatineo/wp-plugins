@@ -275,8 +275,8 @@ function toggleVisOff(boxid)
 				{
 					//Apply localization filters:
 					$field['field_label'] = apply_filters('the_title',$field['field_label']);
-					$field['error_message'] = apply_filters('the_title',$field['field_label']);
-					$field['help_text'] = apply_filters('the_title',$field['field_label']);
+					$field['error_message'] = apply_filters('the_title',$field['error_message']);
+					$field['help_text'] = apply_filters('the_title',$field['help_text']);
 
 					$error_msg = "";
 
